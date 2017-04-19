@@ -19,14 +19,20 @@
 @implementation AppDelegate
 
 
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    
-    XRouter::registerURLPattern("hello/world/",[](std::map<std::string,void *> params)->void{
+  
+    XRouter::registerURLPattern("hello/world/",[](void * params)->void{
+        ParamsMap *paramsMap = (ParamsMap *)params;
+        auto iterator = paramsMap->begin();
+        while(iterator != paramsMap->end()){
+            printf("%s , %s \n",iterator->first.c_str(),iterator->second->simpleValue.c_str());
+            iterator++;
+        }
         printf("hello\n");
-        auto value = params["name"];
-        printf("%s \n",value);
+       
     });
     
 //    XRouter::registerURLPattern("hello/world",[](std::map<std::string,void *> params)->void{
@@ -35,7 +41,8 @@
 //        printf("%s \n",value);
 //    });
 //
-    XRouter::openURL("hello/world/");
+    XRouter::openURL("hello/world?name=zhangsan");
+    
     
     return YES;
 }

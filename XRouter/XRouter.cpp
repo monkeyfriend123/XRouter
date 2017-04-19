@@ -26,18 +26,12 @@ XRouter* XRouter::getInstance(){
 }
 
 
-RouterMap* XRouter::getRoutes(){
-    if (this->routes == NULL){
-        RouterMap* map = new RouterMap();
-        this->routes = map;
+RouterTree *XRouter::getHeaderRouter(){
+    if (headRouter == NULL){
+        headRouter = new RouterTree();
     }
-    return this->routes;
+    return headRouter;
 }
-
-void XRouter::setRoutes(RouterMap* routes){
-    this->routes = routes;
-}
-
 /**
  *  注册 URLPattern 对应的 Handler，在 handler 中可以初始化 VC，然后对 VC 做各种操作
  *
@@ -102,23 +96,25 @@ void XRouter::openURL(string URL, XResultHandler completion){
  *  @param parameters 附加参数
  *  @param completion URL 处理完成后的 callback，完成的判定跟具体的业务相关
  */
-void XRouter::openURL(string URL, RouterMap* userInfo,XResultHandler completion){
+void XRouter::openURL(string URL, ParamsMap* userInfo,XResultHandler completion){
     auto parameters = XRouter::getInstance()->extractParametersFromURL(URL);
     if (parameters) {
-        XRouterHandler *handler =NULL;
+        ParamBox *handler =NULL;
         if (parameters->find("block")!= parameters->end()){
-            handler = (XRouterHandler *)parameters->at("block");
+            handler = (ParamBox *)parameters->at("block");
         }
         
-        if (completion) {
-            parameters->insert(make_pair(XRouterParameterCompletion, &completion));
-        }
-        if (userInfo) {
-            parameters->insert(make_pair(XRouterParameterUserInfo, userInfo));
-        }
-        if (handler != NULL) {
-            parameters->erase("block");
-            (*handler)(*parameters);
+//        if (completion) {
+//            parameters->insert(make_pair(XRouterParameterCompletion, &completion));
+//        }
+//        if (userInfo) {
+//            parameters->insert(make_pair(XRouterParameterUserInfo, userInfo));
+//        }
+        if (handler->type == 1) {
+//            parameters->erase("block");
+//            (*handler)(*parameters);
+            
+            handler->handler(parameters);
         }
     }
 }
@@ -128,36 +124,39 @@ bool Comp(const string &a,const string &b)
     return a>b;
 }
 
-RouterMap * XRouter::extractParametersFromURL(string url)
+ParamsMap * XRouter::extractParametersFromURL(string url)
 {
-    RouterMap* parameters = new RouterMap();
+    ParamsMap* parameters = new ParamsMap();
     
-    parameters->insert(make_pair(XRouterParameterURL, &url));
+    ParamBox *box = new ParamBox();
+    box->simpleValue = url;
+    box->type = 0;
+    parameters->insert(make_pair(XRouterParameterURL, box));
     
-    RouterMap* subRoutes = this->getRoutes();
+    RouterTree* subRoutes = this->getHeaderRouter();
     
     auto pathComponents = this->pathComponentsFromURL(url);
     
     bool found = false;
     
-    void* recentestCompareBlock = NULL;//最近的匹配值
+    XRouterHandler recentestCompareBlock = NULL;//最近的匹配值
     // borrowed from HHRouter(https://github.com/Huohua/HHRouter)
     for (int i = 0 ;i < pathComponents.size(); i++){
         string pathComponent = pathComponents[i];
         
         // 对 key 进行排序，这样可以把 ~ 放到最后
-        auto subRoutesKeys = getMapAllkeys(*subRoutes);
-        sort(subRoutesKeys.begin(), subRoutesKeys.end(), Comp);
+        auto subRoutesKeys = subRoutes->allChildKeys();
+        sort(subRoutesKeys->begin(), subRoutesKeys->end(), Comp);
         
  
-        for (int i = 0 ; i < subRoutesKeys.size(); i++){
-            string key = subRoutesKeys[i];
+        for (int i = 0 ; i < subRoutesKeys->size(); i++){
+            string key = subRoutesKeys->at(i);
             if (key.compare(pathComponent) == 0 || key.compare(X_ROUTER_WILDCARD_CHARACTER)){
                 found = true;
-                subRoutes = (RouterMap *)subRoutes->at(key);
+                subRoutes = subRoutes->findRouter(key);
             } else if (hasPrefix(key,":")) {
                 found = true;
-                subRoutes = (RouterMap *)subRoutes->at(key);
+                subRoutes = subRoutes->findRouter(key);
                 string newKey =  key.substr(1);
                 string newPathComponent = pathComponent;
                 // 再做一下特殊处理，比如 :id.html -> :id
@@ -171,20 +170,25 @@ RouterMap * XRouter::extractParametersFromURL(string url)
 //                        newPathComponent = [newPathComponent stringByReplacingOccurrencesOfString:suffixToStrip withString:@""];
 //                    }
                 }
-                parameters->insert(make_pair(newKey, &newPathComponent));
+                
+                ParamBox *box = new ParamBox();
+                box->simpleValue = newPathComponent;
+                box->type = 0;
+                parameters->insert(make_pair(XRouterParameterURL, box));
+
+                parameters->insert(make_pair(newKey, box));
                 break;
             }
         }
+     
         
-        if (subRoutes->find("_") != subRoutes->end()){
-            if (found && subRoutes->at("_")){
-                recentestCompareBlock = subRoutes->at("_");
-            }
-            
-            // 如果没有找到该 pathComponent 对应的 handler，则以上一层的 handler 作为 fallback
-            if (!found && !subRoutes->at("_")) {
-                return NULL;
-            }
+        if (found && subRoutes->indexOf("_")!= RouterTree::npos()){
+            recentestCompareBlock = subRoutes->findRouter("_")->routerHandler;
+        }
+        
+        // 如果没有找到该 pathComponent 对应的 handler，则以上一层的 handler 作为 fallback
+        if (!found && subRoutes->indexOf("_") == RouterTree::npos()) {
+            return NULL;
         }
     }
     
@@ -199,13 +203,21 @@ RouterMap * XRouter::extractParametersFromURL(string url)
             if (paramArr.size() > 1) {
                 string key = paramArr[0];
                 string value = paramArr[1];
-                parameters->insert(make_pair(key, &value));
+                
+                ParamBox *box = new ParamBox();
+                box->simpleValue = value;
+                box->type = 0;
+                parameters->insert(make_pair(key,box));
             }
         }
     }
     
     if (recentestCompareBlock) {
-        parameters->insert(make_pair("block", recentestCompareBlock));
+        ParamBox *box = new ParamBox();
+        box->handler = recentestCompareBlock;
+        box->type = 1;
+        parameters->insert(make_pair("block", box));
+        
     }
     
     return parameters;
@@ -229,7 +241,7 @@ void* XRouter::objectForURL(string URL){
  *  @param URL
  *  @param userInfo
  */
-void* XRouter::objectForURL(string URL,RouterMap userInfo){
+void* XRouter::objectForURL(string URL,ParamsMap userInfo){
     return NULL;
 }
 
@@ -263,35 +275,34 @@ string XRouter::generateURLWithPattern(string pattern,vector<void *> parameters)
 }
 
 void XRouter::addObjectURLPattern(string URLPattern, XRouterObjectHandler handler){
-    RouterMap *subRoutes = this->addURLPattern(URLPattern);
-    if (handler && subRoutes){
-        subRoutes->insert(make_pair("_", &handler));
-    }
+//    RouterMap *subRoutes = this->addURLPattern(URLPattern);
+//    if (handler && subRoutes){
+//        subRoutes->insert(make_pair("_", &handler));
+//    }
 }
 
 void XRouter::addURLPattern(string URLPattern, XRouterHandler handler){
-    RouterMap *subRoutes = this->addURLPattern(URLPattern);
+    RouterTree *subRoutes = this->addURLPattern(URLPattern);
     if (handler && subRoutes){
-        subRoutes->insert(make_pair("_", &handler));
+       RouterTree *newRouter = subRoutes->insert("_");
+       newRouter->routerHandler = handler;
     }
 }
 
-RouterMap* XRouter::addURLPattern(string URLPattern){
+RouterTree* XRouter::addURLPattern(string URLPattern){
     
     auto pathComponents = this->pathComponentsFromURL(URLPattern);
     auto index = 0;
-    RouterMap* subRoutes = this->getRoutes();
+    RouterTree* subRoutes = this->getHeaderRouter();
     
     while (index < pathComponents.size()) {
         string pathComponent = pathComponents[index];
         
-        bool hasKey = subRoutes->find(pathComponent) != subRoutes->end();
+        bool hasKey = subRoutes->indexOf(pathComponent) != RouterTree::npos();
         if (!hasKey) {
-            
-            RouterMap *emptyMap = new RouterMap();
-            subRoutes->insert(make_pair(pathComponent, emptyMap));
+            subRoutes->insert(pathComponent);
         }
-        subRoutes = (RouterMap *)subRoutes->at(pathComponent);
+        subRoutes = subRoutes->findRouter(pathComponent);
         index++;
     }
     return subRoutes;

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B541F3A1EA79F31001C3BDF /* RouterTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B541F381EA79F31001C3BDF /* RouterTree.cpp */; };
 		CE752DAA1EA6F79B00F83D3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE752DA91EA6F79B00F83D3E /* main.m */; };
 		CE752DAD1EA6F79B00F83D3E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE752DAC1EA6F79B00F83D3E /* AppDelegate.mm */; };
 		CE752DB01EA6F79B00F83D3E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE752DAF1EA6F79B00F83D3E /* ViewController.m */; };
@@ -37,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4B541F381EA79F31001C3BDF /* RouterTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RouterTree.cpp; sourceTree = "<group>"; };
+		4B541F391EA79F31001C3BDF /* RouterTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RouterTree.hpp; sourceTree = "<group>"; };
 		CE752DA51EA6F79B00F83D3E /* XRouter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XRouter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE752DA91EA6F79B00F83D3E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CE752DAB1EA6F79B00F83D3E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -121,6 +124,8 @@
 				CE752DB91EA6F79C00F83D3E /* Info.plist */,
 				CE752DA81EA6F79B00F83D3E /* Supporting Files */,
 				CE752DF81EA7338600F83D3E /* Util.h */,
+				4B541F381EA79F31001C3BDF /* RouterTree.cpp */,
+				4B541F391EA79F31001C3BDF /* RouterTree.hpp */,
 			);
 			path = XRouter;
 			sourceTree = "<group>";
@@ -297,6 +302,7 @@
 				CE752DDE1EA6F7AF00F83D3E /* MGJRouter.m in Sources */,
 				CE752DAD1EA6F79B00F83D3E /* AppDelegate.mm in Sources */,
 				CE752DE11EA6F7BE00F83D3E /* XRouter.cpp in Sources */,
+				4B541F3A1EA79F31001C3BDF /* RouterTree.cpp in Sources */,
 				CE752DAA1EA6F79B00F83D3E /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -531,6 +537,7 @@
 				CE752DD41EA6F79C00F83D3E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CE752DD51EA6F79C00F83D3E /* Build configuration list for PBXNativeTarget "XRouterTests" */ = {
 			isa = XCConfigurationList;
@@ -539,6 +546,7 @@
 				CE752DD71EA6F79C00F83D3E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CE752DD81EA6F79C00F83D3E /* Build configuration list for PBXNativeTarget "XRouterUITests" */ = {
 			isa = XCConfigurationList;
@@ -547,6 +555,7 @@
 				CE752DDA1EA6F79C00F83D3E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -14,9 +14,12 @@
 #include <functional>
 #include <map>
 #include <vector>
-
+#include "RouterTree.hpp"
 using namespace std;
 
+
+
+class ParamBox;
 extern string const XRouterParameterURL;
 extern string const XRouterParameterCompletion;
 extern string const XRouterParameterUserInfo;
@@ -26,7 +29,7 @@ extern string const XRouterParameterUserInfo;
  */
 //typedef void (^MGJRouterHandler)(NSDictionary *routerParameters);
 
-typedef function<void(map<string,void *>)> XRouterHandler;
+typedef function<void(void *)> XRouterHandler;
 
 /**
  *  需要返回一个 object，配合 objectForURL: 使用
@@ -36,11 +39,18 @@ typedef function<void(map<string,void *>)> XRouterObjectHandler;
 typedef function<void(void *)> XResultHandler;
 
 
-typedef map<string,void *> RouterMap;
+typedef map<string,ParamBox *> ParamsMap;
+
+
+struct ParamBox{
+public:
+    string simpleValue;
+    XRouterHandler handler;;
+    int type; //0 : simplevalue, 1 handler
+};
 
 class XRouter{
 private:
-    RouterMap *routes;
 /**
  *  注册 URLPattern 对应的 Handler，在 handler 中可以初始化 VC，然后对 VC 做各种操作
  *
@@ -48,9 +58,10 @@ private:
  *  @param handler    该 block 会传一个字典，包含了注册的 URL 中对应的变量。
  *                    假如注册的 URL 为 mgj://beauty/:id 那么，就会传一个 @{@"id": 4} 这样的字典过来
  */
-public:    
-    RouterMap* getRoutes();
-    void setRoutes(RouterMap *routes);
+public:
+    RouterTree *headRouter;
+    
+    RouterTree *getHeaderRouter();
     //单例
     static XRouter* getInstance();
     
@@ -99,9 +110,9 @@ static void openURL(string URL, XResultHandler completion);
  *  @param parameters 附加参数
  *  @param completion URL 处理完成后的 callback，完成的判定跟具体的业务相关
  */
-static void openURL(string URL, map<string,void *>* parameters,XResultHandler completion);
+static void openURL(string URL, ParamsMap* parameters,XResultHandler completion);
 
-RouterMap * extractParametersFromURL(string url);
+ParamsMap * extractParametersFromURL(string url);
 /**
  * 查找谁对某个 URL 感兴趣，如果有的话，返回一个 object
  *
@@ -115,7 +126,7 @@ static void* objectForURL(string URL);
  *  @param URL
  *  @param userInfo
  */
-static void* objectForURL(string URL,RouterMap userInfo);
+static void* objectForURL(string URL,ParamsMap userInfo);
 
 /**
  *  是否可以打开URL
@@ -146,7 +157,7 @@ static string generateURLWithPattern(string pattern,vector<void *> parameters);
 void addURLPattern(string URLPattern, XRouterHandler handler);
 void addObjectURLPattern(string URLPattern, XRouterObjectHandler handler);
     
-RouterMap* addURLPattern(string URLPattern);
+RouterTree* addURLPattern(string URLPattern);
 
     
 vector<string> pathComponentsFromURL(string URL);
