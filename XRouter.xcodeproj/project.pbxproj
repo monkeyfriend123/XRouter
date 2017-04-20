@@ -10,7 +10,7 @@
 		4B541F3A1EA79F31001C3BDF /* RouterTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B541F381EA79F31001C3BDF /* RouterTree.cpp */; };
 		CE752DAA1EA6F79B00F83D3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE752DA91EA6F79B00F83D3E /* main.m */; };
 		CE752DAD1EA6F79B00F83D3E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE752DAC1EA6F79B00F83D3E /* AppDelegate.mm */; };
-		CE752DB01EA6F79B00F83D3E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE752DAF1EA6F79B00F83D3E /* ViewController.m */; };
+		CE752DB01EA6F79B00F83D3E /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE752DAF1EA6F79B00F83D3E /* ViewController.mm */; };
 		CE752DB31EA6F79B00F83D3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE752DB11EA6F79B00F83D3E /* Main.storyboard */; };
 		CE752DB51EA6F79B00F83D3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE752DB41EA6F79B00F83D3E /* Assets.xcassets */; };
 		CE752DB81EA6F79B00F83D3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE752DB61EA6F79B00F83D3E /* LaunchScreen.storyboard */; };
@@ -45,7 +45,7 @@
 		CE752DAB1EA6F79B00F83D3E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CE752DAC1EA6F79B00F83D3E /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		CE752DAE1EA6F79B00F83D3E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		CE752DAF1EA6F79B00F83D3E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		CE752DAF1EA6F79B00F83D3E /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		CE752DB21EA6F79B00F83D3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CE752DB41EA6F79B00F83D3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE752DB71EA6F79B00F83D3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -117,7 +117,7 @@
 				CE752DAB1EA6F79B00F83D3E /* AppDelegate.h */,
 				CE752DAC1EA6F79B00F83D3E /* AppDelegate.mm */,
 				CE752DAE1EA6F79B00F83D3E /* ViewController.h */,
-				CE752DAF1EA6F79B00F83D3E /* ViewController.m */,
+				CE752DAF1EA6F79B00F83D3E /* ViewController.mm */,
 				CE752DB11EA6F79B00F83D3E /* Main.storyboard */,
 				CE752DB41EA6F79B00F83D3E /* Assets.xcassets */,
 				CE752DB61EA6F79B00F83D3E /* LaunchScreen.storyboard */,
@@ -298,7 +298,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE752DB01EA6F79B00F83D3E /* ViewController.m in Sources */,
+				CE752DB01EA6F79B00F83D3E /* ViewController.mm in Sources */,
 				CE752DDE1EA6F7AF00F83D3E /* MGJRouter.m in Sources */,
 				CE752DAD1EA6F79B00F83D3E /* AppDelegate.mm in Sources */,
 				CE752DE11EA6F7BE00F83D3E /* XRouter.cpp in Sources */,

@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "XRouter.hpp"
 
 @interface ViewController ()
 
@@ -23,6 +24,21 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)btnClicked:(id)sender{
+    
+    auto userInfo = new ParamsMap();
+    ParamBox *box = new ParamBox();
+    box->simpleValue = "122";
+    box->type = 0;
+    userInfo->insert(make_pair("test", box));
+    
+    
+    XRouter::openURL("hello/world?name=zhangsan",userInfo);
+    XRouter::openURL("hello/123?name=zhangsan",userInfo);
+    XRouter::openURL("hello/cpp?name=zhangsan",userInfo);
+
 }
 
 

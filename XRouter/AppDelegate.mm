@@ -46,17 +46,9 @@
     });
     
     
-    auto userInfo = new ParamsMap();
-    ParamBox *box = new ParamBox();
-    box->simpleValue = "122";
-    box->type = 0;
+ 
     
-    userInfo->insert(make_pair("test", box));
-    
-    XRouter::openURL("hello/world?name=zhangsan",userInfo);
-    XRouter::openURL("hello/123?name=zhangsan",userInfo);
-    XRouter::openURL("hello/cpp?name=zhangsan",userInfo);
-    
+       
     
     return YES;
 }
