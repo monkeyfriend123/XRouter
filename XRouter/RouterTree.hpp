@@ -19,11 +19,14 @@ using namespace std;
 typedef function<void(void *)> RouterHandler;
 
 typedef struct RouterTree{
-    vector<RouterTree *>childs;
+    vector<RouterTree *> *childs;
     
     string pathComponent;
     
     RouterHandler routerHandler;
+    
+    
+    RouterTree();
     
     //按照路由路径 插入一个节点
     RouterTree* insert(string pathComponent);

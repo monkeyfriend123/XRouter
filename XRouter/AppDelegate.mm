@@ -23,7 +23,17 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-  
+    XRouter::registerURLPattern("hello/cpp/",[](void * params)->void{
+        ParamsMap *paramsMap = (ParamsMap *)params;
+        auto iterator = paramsMap->begin();
+        while(iterator != paramsMap->end()){
+            printf("%s , %s \n",iterator->first.c_str(),iterator->second->simpleValue.c_str());
+            iterator++;
+        }
+        printf("hello cpp\n");
+        
+    });
+    
     XRouter::registerURLPattern("hello/world/",[](void * params)->void{
         ParamsMap *paramsMap = (ParamsMap *)params;
         auto iterator = paramsMap->begin();
@@ -31,17 +41,12 @@
             printf("%s , %s \n",iterator->first.c_str(),iterator->second->simpleValue.c_str());
             iterator++;
         }
-        printf("hello\n");
+        printf("hello world\n");
        
     });
     
-//    XRouter::registerURLPattern("hello/world",[](std::map<std::string,void *> params)->void{
-//        printf("hello\n");
-//        auto value = params["name"];
-//        printf("%s \n",value);
-//    });
-//
     XRouter::openURL("hello/world?name=zhangsan");
+    XRouter::openURL("hello/cpp?name=zhangsan");
     
     
     return YES;

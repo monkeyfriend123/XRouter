@@ -110,7 +110,7 @@ void XRouter::openURL(string URL, ParamsMap* userInfo,XResultHandler completion)
 //        if (userInfo) {
 //            parameters->insert(make_pair(XRouterParameterUserInfo, userInfo));
 //        }
-        if (handler->type == 1) {
+        if (handler && handler->type == 1) {
 //            parameters->erase("block");
 //            (*handler)(*parameters);
             
@@ -149,11 +149,12 @@ ParamsMap * XRouter::extractParametersFromURL(string url)
         sort(subRoutesKeys->begin(), subRoutesKeys->end(), Comp);
         
  
-        for (int i = 0 ; i < subRoutesKeys->size(); i++){
-            string key = subRoutesKeys->at(i);
+        for (int j = 0 ; j < subRoutesKeys->size(); j++){
+            string key = subRoutesKeys->at(j);
             if (key.compare(pathComponent) == 0 || key.compare(X_ROUTER_WILDCARD_CHARACTER)){
                 found = true;
                 subRoutes = subRoutes->findRouter(key);
+                break;
             } else if (hasPrefix(key,":")) {
                 found = true;
                 subRoutes = subRoutes->findRouter(key);
@@ -182,12 +183,12 @@ ParamsMap * XRouter::extractParametersFromURL(string url)
         }
      
         
-        if (found && subRoutes->indexOf("_")!= RouterTree::npos()){
+        if (found && subRoutes && subRoutes->indexOf("_")!= RouterTree::npos()){
             recentestCompareBlock = subRoutes->findRouter("_")->routerHandler;
         }
         
         // 如果没有找到该 pathComponent 对应的 handler，则以上一层的 handler 作为 fallback
-        if (!found && subRoutes->indexOf("_") == RouterTree::npos()) {
+        if (!found && subRoutes && subRoutes->indexOf("_") == RouterTree::npos()) {
             return NULL;
         }
     }
