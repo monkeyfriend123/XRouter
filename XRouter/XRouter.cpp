@@ -104,16 +104,17 @@ void XRouter::openURL(string URL, ParamsMap* userInfo,XResultHandler completion)
             handler = (ParamBox *)parameters->at("block");
         }
         
-//        if (completion) {
-//            parameters->insert(make_pair(XRouterParameterCompletion, &completion));
-//        }
-//        if (userInfo) {
-//            parameters->insert(make_pair(XRouterParameterUserInfo, userInfo));
-//        }
+        if (completion) {
+            ParamBox *box = new ParamBox();
+            box->type = 1;
+            box->handler = completion;
+            parameters->insert(make_pair(XRouterParameterCompletion, box));
+        }
+        if (userInfo) {
+            parameters->insert(userInfo->begin(),userInfo->end());
+        }
         if (handler && handler->type == 1) {
-//            parameters->erase("block");
-//            (*handler)(*parameters);
-            
+            parameters->erase("block");
             handler->handler(parameters);
         }
     }

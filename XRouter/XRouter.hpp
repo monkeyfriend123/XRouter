@@ -36,7 +36,7 @@ typedef function<void(void *)> XRouterHandler;
  */
 typedef function<void(map<string,void *>)> XRouterObjectHandler;
 
-typedef function<void(void *)> XResultHandler;
+typedef XRouterHandler XResultHandler;
 
 
 typedef map<string,ParamBox *> ParamsMap;
@@ -110,7 +110,7 @@ static void openURL(string URL, XResultHandler completion);
  *  @param parameters 附加参数
  *  @param completion URL 处理完成后的 callback，完成的判定跟具体的业务相关
  */
-static void openURL(string URL, ParamsMap* parameters,XResultHandler completion);
+static void openURL(string URL, ParamsMap* parameters,XResultHandler completion = NULL);
 
 ParamsMap * extractParametersFromURL(string url);
 /**
