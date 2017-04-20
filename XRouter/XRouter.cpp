@@ -151,7 +151,7 @@ ParamsMap * XRouter::extractParametersFromURL(string url)
  
         for (int j = 0 ; j < subRoutesKeys->size(); j++){
             string key = subRoutesKeys->at(j);
-            if (key.compare(pathComponent) == 0 || key.compare(X_ROUTER_WILDCARD_CHARACTER)){
+            if (key.compare(pathComponent) == 0 || key.compare(X_ROUTER_WILDCARD_CHARACTER) == 0){
                 found = true;
                 subRoutes = subRoutes->findRouter(key);
                 break;

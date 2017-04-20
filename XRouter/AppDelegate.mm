@@ -34,7 +34,7 @@
         
     });
     
-    XRouter::registerURLPattern("hello/world/",[](void * params)->void{
+    XRouter::registerURLPattern("hello/",[](void * params)->void{
         ParamsMap *paramsMap = (ParamsMap *)params;
         auto iterator = paramsMap->begin();
         while(iterator != paramsMap->end()){
@@ -46,6 +46,7 @@
     });
     
     XRouter::openURL("hello/world?name=zhangsan");
+    XRouter::openURL("hello/123?name=zhangsan");
     XRouter::openURL("hello/cpp?name=zhangsan");
     
     
